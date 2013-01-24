@@ -27,7 +27,8 @@ class Miniskirt < Struct.new(:__klass__)
         attrs.symbolize_keys!.reverse_update(h).each do |k, v|
           r.send "#{k}=", case v when String # Sequence and interpolate.
             v.sub(/%\d*d/) {|d| d % n ||= (
-              m.respond_to?(:maximum) ? m.maximum(:id) : m.max(:id)
+              # m.respond_to?(:maximum) ? m.maximum(:id) : m.max(:id)
+              m.respond_to?(:maximum) ? m.maximum(m.primary_key) : m.max(m.primary_key)
             ).to_i + 1} % attrs % n
           when Proc then v.call(r) else v
           end
